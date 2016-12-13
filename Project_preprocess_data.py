@@ -79,11 +79,30 @@ insulting_list_1d =  [x for sublist in insulting_list for x in sublist]
 
 print(colored("Bag of words built after applying all the above mentioned things are : \n", 'cyan', attrs = ['bold']))
 
+#print(insulting_list_1d)
+
+# Replacing the words which are in slang form 
+
+insulting_list_1d = [x.replace(" u ", " you" ) for x in insulting_list_1d]
+insulting_list_1d = [x.replace(" em "," them ") for x in insulting_list_1d]
+insulting_list_1d = [x.replace(" da "," the ") for x in insulting_list_1d]
+insulting_list_1d = [x.replace(" yo "," you ") for x in insulting_list_1d]
+insulting_list_1d = [x.replace(" ur "," you ") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("won't", "will not") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("can't", "cannot") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("i'm", "i am") for x in insulting_list_1d]
+insulting_list_1d = [x.replace(" im ", " i am ") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("ain't", "is not") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("'ll", " will") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("'t", " not") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("'ve", " have") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("'s", " is") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("'re", " are") for x in insulting_list_1d]
+insulting_list_1d = [x.replace("'d", " would") for x in insulting_list_1d]
+
 print(insulting_list_1d)
-# Combining all the tokenized insulting sentences into single bag of words
 
-
-
-
-
-# Training
+# Taking google list of bad words
+def bad_words:
+	bw = open('google_bad_words.txt', 'r')
+	
