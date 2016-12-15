@@ -1,0 +1,86 @@
+<<<<<<< HEAD
+Dataset : 
+https://www.kaggle.com/c/detecting-insults-in-social-commentary
+
+Feature Selection using Weka toolkit.
+
+
+Preprocessing -> Feature extraction -> Feature Selection -> Classification
+
+Preprocessing : The preprocessing involved the removal of any nonprintable hexadecimal characters, special characters
+and html tags. The raw data, for example contained text such as ”A \\xc2\\xa0majority
+of Canadians can and has been wrong before now and will be again.\\n Unless you’re supportive
+of the idea” would be converted to ”a majority of canadians can and has been wrong
+before now and will be again unless youre supportive of the idea.” This was performed in order
+to get a cleaner training data set. Regex, was used to perform the parse and discard of these special
+ characters, and the rest of the text was converted to lowercase for simplicity. The
+second part of the preprocessing step involved the stemming of tokens, to reduce the words
+to its roots, however in the final iteration of the code write up, this step was discarded because
+some of the insults were being wrongly tokenized and a reduction in overall accuracy occured.
+
+Feature Extraction : Convert the bag of words into WordVector. WordVector - Words in sentence along with
+its frequency. Words such as ”the”, ”is”, ”and” are examples of 1-grams that should be ignored.
+
+A keyword’s term frequency is the number of times the wor appears in the title. Its document
+frequency is the number of title the word appears over the total number of titles. The
+keywords’s tf-idf weright is its term frequency divided by its document frequency.
+
+This score measures fraction of the occurence of an attribute in the given comment over the entire given document.
+
+List of bad words : Google (We need to extend and make minor changes to it, maybe it has been corrected in the recent updates)
+
+Length of string : Lwngth of comments a natural attribute
+
+Special Characters : Convert special characters to blank spaces, (I don't think it will make difference).
+
+Upper Case letters : Convert to lower case letters
+
+
+Model we are using : Logistic Regresiion
+
+Training Parameter vector using Stochastic grading
+
+=======
+Dataset : 
+https://www.kaggle.com/c/detecting-insults-in-social-commentary
+
+Feature Selection using Weka toolkit.
+
+
+Preprocessing -> Feature extraction -> Feature Selection -> Classification
+
+Preprocessing : The preprocessing involved the removal of any nonprintable hexadecimal characters, special characters
+and html tags. The raw data, for example contained text such as ”A \\xc2\\xa0majority
+of Canadians can and has been wrong before now and will be again.\\n Unless you’re supportive
+of the idea” would be converted to ”a majority of canadians can and has been wrong
+before now and will be again unless youre supportive of the idea.” This was performed in order
+to get a cleaner training data set. Regex, was used to perform the parse and discard of these special
+ characters, and the rest of the text was converted to lowercase for simplicity. The
+second part of the preprocessing step involved the stemming of tokens, to reduce the words
+to its roots, however in the final iteration of the code write up, this step was discarded because
+some of the insults were being wrongly tokenized and a reduction in overall accuracy occured.
+
+Feature Extraction : Convert the bag of words into WordVector. WordVector - Words in sentence along with
+its frequency. Words such as ”the”, ”is”, ”and” are examples of 1-grams that should be ignored.
+
+A keyword’s term frequency is the number of times the wor appears in the title. Its document
+frequency is the number of title the word appears over the total number of titles. The
+keywords’s tf-idf weright is its term frequency divided by its document frequency.
+
+This score measures fraction of the occurence of an attribute in the given comment over the entire given document.
+
+List of bad words : Google (We need to extend and make minor changes to it, maybe it has been corrected in the recent updates)
+
+Length of string : Lwngth of comments a natural attribute
+
+Special Characters : Convert special characters to blank spaces, (I don't think it will make difference).
+
+Upper Case letters : Convert to lower case letters
+
+
+Model we are using : Logistic Regresiion
+
+Training Parameter vector using Stochastic grading
+
+>>>>>>> 14ab4eb82700cae53bc1b7483d1212669627ccdd
+Classification, Ranking
