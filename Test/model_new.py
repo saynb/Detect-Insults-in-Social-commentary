@@ -17,7 +17,7 @@ from time import time
 # - Line 197 specifies a random forest model with 4 threads (2.5GB RAM per thread is needed). If necessary, reduce the n_jobs param.
 # The RF makes a small improvement, so its commented out and probably not worth the effort.
 
-DIR_PATH = "/Users/prathakrastogi/Documents/SEM 1/AI_proj/Test/"
+DIR_PATH = "/Users/prathakrastogi/Documents/SEM 1/AI_proj/Test/" #change the directory path according to your requirement
 
 TRAIN_FILE      = DIR_PATH + "train.csv"
 TEST_SOL_FILE   = DIR_PATH + "test_with_solutions.csv"   # This is also used for training, together with TRAIN_FILE
