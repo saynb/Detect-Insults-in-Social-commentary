@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import sys, math, re
 from operator import itemgetter
 import math
@@ -197,4 +197,3 @@ print(insulting_list_1d)
 
 
 # Training
->>>>>>> 562749b2dc114da4f0f7e3f37ca35512b9cc6c55
