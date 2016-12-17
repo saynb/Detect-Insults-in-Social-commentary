@@ -18,6 +18,8 @@ import sklearn.metrics
 import sklearn.svm
 import sklearn.naive_bayes
 import sklearn.neighbors
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 
 
 
@@ -39,6 +41,11 @@ print(header_list)
 
 #Reading Dataset
 dataframe_dataset = pd.read_csv(path, na_values='unknown')
+
+# The list for the corresponding 1 and 0 values of the comments
+dataframe_target = dataframe_dataset[['Insult']]
+insult_target = dataframe_target.ix[:,0].tolist()
+print(insult_target)
 
 col3 = dataframe_dataset[['Comment']]
 # Removing \n
@@ -72,7 +79,9 @@ stemmer = SnowballStemmer('english')
 dataframe_dataset['stemmed'] = dataframe_dataset["tokenized_sents"].apply(lambda x: [stemmer.stem(y) for y in x])
 #print(dataframe_dataset['stemmed'])
 
-insulting_list =[]
+#This is the list for all the words
+list_of_all_words = []
+list_of_all_words = dataframe_dataset['stemmed'].tolist()
 
 # Separating the list of both insulting and non insulting comments
 '''for i in dataframe_dataset['Insult']:
@@ -81,34 +90,38 @@ insulting_list =[]
         insulting_list.append(dataframe_dataset['stemmed'])
 
 print(insulting_list)'''
-dataframe_dataset_filter = dataframe_dataset.loc[dataframe_dataset['Insult'] == 1]
+'''dataframe_dataset_filter = dataframe_dataset.loc[dataframe_dataset['Insult'] == 1]
 insulting_list = dataframe_dataset_filter['stemmed'].tolist()
-#print(insulting_list)
+print(insulting_list)'''
 
-insulting_list_1d =  [x for sublist in insulting_list for x in sublist]
+list_of_all_words = [[x.replace(" u ", " you" ) for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace(" em "," them ") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace(" da "," the ") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace(" yo "," you ") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace(" ur "," you ") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("won't", "will not") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("can't", "cannot") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("i'm", "i am") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace(" im ", " i am ") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("ain't", "is not") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("'ll", " will") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("'t", " not") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("'ve", " have") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("'s", " is") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("'re", " are") for x in l] for l in list_of_all_words]
+list_of_all_words = [[x.replace("'d", " would") for x in l] for l in list_of_all_words]
 
-print(colored("Bag of words built after applying all the above mentioned things are : \n", 'cyan', attrs = ['bold']))
+print(list_of_all_words)
+
+#insulting_list_1d =  [x for sublist in insulting_list for x in sublist]
+
+#print(colored("Bag of words built after applying all the above mentioned things are : \n", 'cyan', attrs = ['bold']))
 
 #print(insulting_list_1d)
 
 # Replacing the words which are in slang form 
 
-insulting_list_1d = [x.replace(" u ", " you" ) for x in insulting_list_1d]
-insulting_list_1d = [x.replace(" em "," them ") for x in insulting_list_1d]
-insulting_list_1d = [x.replace(" da "," the ") for x in insulting_list_1d]
-insulting_list_1d = [x.replace(" yo "," you ") for x in insulting_list_1d]
-insulting_list_1d = [x.replace(" ur "," you ") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("won't", "will not") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("can't", "cannot") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("i'm", "i am") for x in insulting_list_1d]
-insulting_list_1d = [x.replace(" im ", " i am ") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("ain't", "is not") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("'ll", " will") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("'t", " not") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("'ve", " have") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("'s", " is") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("'re", " are") for x in insulting_list_1d]
-insulting_list_1d = [x.replace("'d", " would") for x in insulting_list_1d]
+
 
 #print(insulting_list_1d)
 
@@ -134,7 +147,7 @@ text_clf = Pipeline([('vect', CountVectorizer(ngram_range=(2, 2))),
                      ('clf', MultinomialNB()),
                      ])
 print(len(insulting_list_1d))
-text_clf = text_clf.fit(insulting_list_1d, insulting_list_1d[:n])
+text_clf = text_clf.fit(insulting_list_1d)
 
 print("Print here the mean value")
 from sklearn import metrics
