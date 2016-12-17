@@ -10,6 +10,15 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
+import matplotlib.pyplot as plt
+from sklearn.model_selection import learning_curve
+from sklearn.model_selection import ShuffleSplit
+import sklearn.datasets
+import sklearn.metrics
+import sklearn.svm
+import sklearn.naive_bayes
+import sklearn.neighbors
+
 
 
 print(colored("Where is the dataset ? Specify the path", 'blue', attrs = ['bold']))
@@ -101,12 +110,32 @@ insulting_list_1d = [x.replace("'s", " is") for x in insulting_list_1d]
 insulting_list_1d = [x.replace("'re", " are") for x in insulting_list_1d]
 insulting_list_1d = [x.replace("'d", " would") for x in insulting_list_1d]
 
-print(insulting_list_1d)
+#print(insulting_list_1d)
 
 # Taking google list of bad words
-def bad_words:
-	bw = open('google_bad_words.txt', 'r')
-	
+bw = open('full-list-of-bad-words.txt', 'r')
+
+inp_text = bw.read()  # raeding file generated from puzzleenerator.py
+inp_text = re.split('\n|,', inp_text)
+#print(inp_text)
  
+# Using sklearn features to train the data
+
 
 # Training
+from sklearn.pipeline import Pipeline
+from sklearn.naive_bayes import MultinomialNB
+
+print("Using Naive Baye's")
+from sklearn.naive_bayes import MultinomialNB
+
+text_clf = Pipeline([('vect', CountVectorizer(ngram_range=(2, 2))),
+                     ('tfidf', TfidfTransformer()),
+                     ('clf', MultinomialNB()),
+                     ])
+print(len(insulting_list_1d))
+text_clf = text_clf.fit(insulting_list_1d, insulting_list_1d[:n])
+
+print("Print here the mean value")
+from sklearn import metrics
+print("Print metric report")
