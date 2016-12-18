@@ -34,6 +34,16 @@ def clean_dataset(dataframe_dataset):
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('http\S+','')
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('www\S+','')
 
+# Removing all the non ASCII characters
+    dataframe_dataset['Comment'] = dataframe_dataset["Comment"].apply(lambda x: ''.join([" " if ord(i) < 32 or ord(i) > 126 else i for i in x]))
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('xa0',' ')
+# Removing the _ with ' '
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('_',' ')
+    
+# Trimming all the white spaces
+    #dataframe_dataset["Comment"] = dataframe_dataset["Comment"].map(str.strip)
+    dataframe_dataset['Comment'] = pd.core.strings.str_strip(dataframe_dataset['Comment'])
+    print(dataframe_dataset['Comment'])
 #Tokenizing all the words in a given sentence
     dataframe_dataset['tokenized_sents'] = dataframe_dataset.apply(lambda row: nltk.word_tokenize(row['Comment']), axis=1)
 
@@ -41,7 +51,7 @@ def clean_dataset(dataframe_dataset):
     cust_list = open("Stop_words_custom_list.txt", 'r')
     cust_list = cust_list.read()
     cust_stop_list = re.split('\n|,', cust_list)
-    print(cust_stop_list)
+    #print(cust_stop_list)
     dataframe_dataset['tokenized_sents'] = dataframe_dataset['tokenized_sents'].apply(lambda x: [item for item in x if item not in cust_stop_list])
 
 # Stemming all the words
