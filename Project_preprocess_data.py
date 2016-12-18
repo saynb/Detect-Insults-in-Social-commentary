@@ -4,13 +4,9 @@ from operator import itemgetter
 import math
 import os
 import nltk
-from colorama import init
-from termcolor import colored
 import pandas as pd
-from bs4 import BeautifulSoup
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
-import matplotlib.pyplot as plt
 from sklearn.model_selection import learning_curve
 from sklearn.model_selection import ShuffleSplit
 import sklearn.datasets
@@ -23,10 +19,10 @@ from sklearn.feature_extraction.text import TfidfTransformer
 
 
 
-print(colored("Where is the dataset ? Specify the path", 'blue', attrs = ['bold']))
+print("Where is the dataset ? Specify the path")
 
-path = r'F:\SBU_FirstSem\Artificial_Intelligence\\Project\\train.csv'
-print(colored("Path to dataset is \n" + path, 'green', attrs = ['bold']))
+path = r'./train.csv'
+print("Path to dataset is \n" + path)
 
 class Comment:
     def __init__(self, content):
@@ -36,16 +32,14 @@ inp = open(path, 'r')
 inp_header = inp.readline()
 header_list = re.split("[,\n]" , inp_header)
 
-print(colored("Path to dataset is \n", 'green', attrs = ['bold']))
-print(header_list)
 
 #Reading Dataset
-dataframe_dataset = pd.read_csv(path, na_values='unknown')
+dataframe_dataset = pd.read_csv(path, na_values='unknown', encoding="utf-8")
 
 # The list for the corresponding 1 and 0 values of the comments
 dataframe_target = dataframe_dataset[['Insult']]
 insult_target = dataframe_target.ix[:,0].tolist()
-print(insult_target)
+#print(insult_target)
 
 col3 = dataframe_dataset[['Comment']]
 # Removing \n
@@ -94,61 +88,24 @@ print(insulting_list)'''
 insulting_list = dataframe_dataset_filter['stemmed'].tolist()
 print(insulting_list)'''
 
-list_of_all_words = [[x.replace(" u ", " you" ) for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace(" em "," them ") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace(" da "," the ") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace(" yo "," you ") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace(" ur "," you ") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("won't", "will not") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("can't", "cannot") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("i'm", "i am") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace(" im ", " i am ") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("ain't", "is not") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("'ll", " will") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("'t", " not") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("'ve", " have") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("'s", " is") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("'re", " are") for x in l] for l in list_of_all_words]
-list_of_all_words = [[x.replace("'d", " would") for x in l] for l in list_of_all_words]
+map_words = {"u": "you", "em":"them", "da":"the", "yo":"you",
+        "ur":"you", "won't": "will not", "won't": "will not",
+        "can't": "can not", "i'm": "i am", "i'm": "i am", "ain't": "is not",
+        "'ll": "will", "'t": "not", "'ve": "have", "'s": "is", "'re": "are",
+        "'d": "would"}
 
-print(list_of_all_words)
+dataframe_dataset['replaced stemmed'] = dataframe_dataset["stemmed"].map(lambda x: [map_words[x[i]] if x[i] in map_words else x[i] for i in range(len(x)) ])
 
-#insulting_list_1d =  [x for sublist in insulting_list for x in sublist]
-
-#print(colored("Bag of words built after applying all the above mentioned things are : \n", 'cyan', attrs = ['bold']))
-
-#print(insulting_list_1d)
-
-# Replacing the words which are in slang form 
-
-
-
-#print(insulting_list_1d)
 
 # Taking google list of bad words
 bw = open('full-list-of-bad-words.txt', 'r')
 
-inp_text = bw.read()  # raeding file generated from puzzleenerator.py
-inp_text = re.split('\n|,', inp_text)
+#inp_text = bw.read()  # raeding file generated from puzzleenerator.py
+#inp_text = re.split('\n|,', inp_text)
 #print(inp_text)
- 
-# Using sklearn features to train the data
+
+#print dataframe_dataset.applymap(lambda x: isinstance(x, (int, float))).all(0)
+
+dataframe_dataset.to_csv('Train_clean.csv')
 
 
-# Training
-from sklearn.pipeline import Pipeline
-from sklearn.naive_bayes import MultinomialNB
-
-print("Using Naive Baye's")
-from sklearn.naive_bayes import MultinomialNB
-
-text_clf = Pipeline([('vect', CountVectorizer(ngram_range=(2, 2))),
-                     ('tfidf', TfidfTransformer()),
-                     ('clf', MultinomialNB()),
-                     ])
-print(len(insulting_list_1d))
-text_clf = text_clf.fit(insulting_list_1d)
-
-print("Print here the mean value")
-from sklearn import metrics
-print("Print metric report")
