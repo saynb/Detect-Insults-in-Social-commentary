@@ -17,8 +17,6 @@ import sklearn.neighbors
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
-
-
 print("Where is the dataset ? Specify the path")
 
 path = r'./train.csv'
@@ -46,12 +44,15 @@ col3 = dataframe_dataset[['Comment']]
 dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('\n', '')
 #print(dataframe_dataset['Comment'])
 #example1 = BeautifulSoup(dataframe_dataset['Comment'][0], "lxml")
+# Converting all uppercase letters to lower case
+dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.lower()
 
 #print(example1.get_text)
 # Removing all HTML Tags
 dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('[^\w\s]','')
 #print(dataframe_dataset['Comment'])
-
+dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('http\S+','')
+dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('www\S+','')
 # Converting all uppercase letters to lower case
 dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.lower()
 #print(dataframe_dataset['Comment'])
