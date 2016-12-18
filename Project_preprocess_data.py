@@ -62,10 +62,12 @@ dataframe_dataset['tokenized_sents'] = dataframe_dataset.apply(lambda row: nltk.
 
 #print(dataframe_dataset)
 
-#Removing all the stop words which have no meaning
-stop = stopwords.words('english')
-#print(stop)
-dataframe_dataset['tokenized_sents'] = dataframe_dataset['tokenized_sents'].apply(lambda x: [item for item in x if item not in stop])
+# A custom stop words list which does not exclude words which have a referral meaning like you, we etc
+cust_list = open("Stop_words_custom_list.txt", 'r')
+cust_list = cust_list.read()
+cust_stop_list = re.split('\n|,', cust_list)
+print(cust_stop_list)
+dataframe_dataset['tokenized_sents'] = dataframe_dataset['tokenized_sents'].apply(lambda x: [item for item in x if item not in cust_stop_list])
 #print(dataframe_dataset['tokenized_sents'])
 
 # Stemming all the words
