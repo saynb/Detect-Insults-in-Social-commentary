@@ -17,87 +17,58 @@ import sklearn.neighbors
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
-print("Where is the dataset ? Specify the path")
 
-path = r'./train.csv'
-print("Path to dataset is \n" + path)
-
-class Comment:
-    def __init__(self, content):
-        self.text = content
-
-inp = open(path, 'r')
-inp_header = inp.readline()
-header_list = re.split("[,\n]" , inp_header)
-
-
-#Reading Dataset
-dataframe_dataset = pd.read_csv(path, na_values='unknown', encoding="utf-8")
+def clean_dataset(dataframe_dataset):
 
 # The list for the corresponding 1 and 0 values of the comments
-dataframe_target = dataframe_dataset[['Insult']]
-insult_target = dataframe_target.ix[:,0].tolist()
-#print(insult_target)
+    dataframe_target = dataframe_dataset[['Insult']]
+    insult_target = dataframe_target.ix[:,0].tolist()
 
-col3 = dataframe_dataset[['Comment']]
+# Converting all uppercase letters to lower case
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.lower()
 # Removing \n
-dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('\n', '')
-#print(dataframe_dataset['Comment'])
-#example1 = BeautifulSoup(dataframe_dataset['Comment'][0], "lxml")
-# Converting all uppercase letters to lower case
-dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.lower()
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('\n', '')
 
-#print(example1.get_text)
 # Removing all HTML Tags
-dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('[^\w\s]','')
-#print(dataframe_dataset['Comment'])
-dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('http\S+','')
-dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('www\S+','')
-# Converting all uppercase letters to lower case
-dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.lower()
-#print(dataframe_dataset['Comment'])
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('[^\w\s]','')
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('http\S+','')
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('www\S+','')
 
 #Tokenizing all the words in a given sentence
-dataframe_dataset['tokenized_sents'] = dataframe_dataset.apply(lambda row: nltk.word_tokenize(row['Comment']), axis=1)
-#print(dataframe_dataset['tokenized_sents'])
-
-#print(dataframe_dataset)
+    dataframe_dataset['tokenized_sents'] = dataframe_dataset.apply(lambda row: nltk.word_tokenize(row['Comment']), axis=1)
 
 # A custom stop words list which does not exclude words which have a referral meaning like you, we etc
-cust_list = open("Stop_words_custom_list.txt", 'r')
-cust_list = cust_list.read()
-cust_stop_list = re.split('\n|,', cust_list)
-print(cust_stop_list)
-dataframe_dataset['tokenized_sents'] = dataframe_dataset['tokenized_sents'].apply(lambda x: [item for item in x if item not in cust_stop_list])
-#print(dataframe_dataset['tokenized_sents'])
+    cust_list = open("Stop_words_custom_list.txt", 'r')
+    cust_list = cust_list.read()
+    cust_stop_list = re.split('\n|,', cust_list)
+    print(cust_stop_list)
+    dataframe_dataset['tokenized_sents'] = dataframe_dataset['tokenized_sents'].apply(lambda x: [item for item in x if item not in cust_stop_list])
 
 # Stemming all the words
-stemmer = SnowballStemmer('english')
-dataframe_dataset['stemmed'] = dataframe_dataset["tokenized_sents"].apply(lambda x: [stemmer.stem(y) for y in x])
-#print(dataframe_dataset['stemmed'])
-
-#This is the list for all the words
-list_of_all_words = []
-list_of_all_words = dataframe_dataset['stemmed'].tolist()
+    stemmer = SnowballStemmer('english')
+    dataframe_dataset['stemmed'] = dataframe_dataset["tokenized_sents"].apply(lambda x: [stemmer.stem(y) for y in x])
 
 # Separating the list of both insulting and non insulting comments
-'''for i in dataframe_dataset['Insult']:
-    if dataframe_dataset.iloc[i]['Insult'] == 1:
+    '''for i in dataframe_dataset['Insult']:
+        if dataframe_dataset.iloc[i]['Insult'] == 1:
 
-        insulting_list.append(dataframe_dataset['stemmed'])
+            insulting_list.append(dataframe_dataset['stemmed'])
 
-print(insulting_list)'''
-'''dataframe_dataset_filter = dataframe_dataset.loc[dataframe_dataset['Insult'] == 1]
-insulting_list = dataframe_dataset_filter['stemmed'].tolist()
-print(insulting_list)'''
+    print(insulting_list)'''
+    '''dataframe_dataset_filter = dataframe_dataset.loc[dataframe_dataset['Insult'] == 1]
+    insulting_list = dataframe_dataset_filter['stemmed'].tolist()
+    print(insulting_list)'''
 
-map_words = {"u": "you", "em":"them", "da":"the", "yo":"you",
-        "ur":"you", "won't": "will not", "won't": "will not",
-        "can't": "can not", "i'm": "i am", "i'm": "i am", "ain't": "is not",
-        "'ll": "will", "'t": "not", "'ve": "have", "'s": "is", "'re": "are",
-        "'d": "would"}
+# Replacing shorthand and other internet slangs with correct phrases
+    map_words = {"u": "you", "em":"them", "da":"the", "yo":"you",
+            "ur":"you", "won't": "will not", "won't": "will not",
+            "can't": "can not", "i'm": "i am", "i'm": "i am", "ain't": "is not",
+            "'ll": "will", "'t": "not", "'ve": "have", "'s": "is", "'re": "are",
+            "'d": "would"}
 
-dataframe_dataset['replaced stemmed'] = dataframe_dataset["stemmed"].map(lambda x: [map_words[x[i]] if x[i] in map_words else x[i] for i in range(len(x)) ])
+    dataframe_dataset['replaced stemmed'] = dataframe_dataset["stemmed"].map(lambda x: [map_words[x[i]] if x[i] in map_words else x[i] for i in range(len(x)) ])
+
+    return
 
 
 # Taking google list of bad words
@@ -106,9 +77,20 @@ bw = open('full-list-of-bad-words.txt', 'r')
 #inp_text = bw.read()  # raeding file generated from puzzleenerator.py
 #inp_text = re.split('\n|,', inp_text)
 #print(inp_text)
-
 #print dataframe_dataset.applymap(lambda x: isinstance(x, (int, float))).all(0)
 
+#Reading Train Dataset
+path = r'./train.csv'
+print("Path to dataset is \n" + path)
+dataframe_dataset = pd.read_csv(path, na_values='unknown', encoding="utf-8")
+clean_dataset(dataframe_dataset)
 dataframe_dataset.to_csv('Train_clean.csv')
+
+#Reading Test Dataset
+path = r'./Test/test_with_solutions.csv'
+print("Path to test dataset is \n" + path)
+dataframe_dataset_test = pd.read_csv(path, na_values='unknown', encoding="utf-8")
+clean_dataset(dataframe_dataset_test)
+dataframe_dataset_test.to_csv('Test_clean.csv')
 
 
