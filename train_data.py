@@ -85,11 +85,11 @@ print(np.mean(predicted == dataframe_dataset_test["Insult"]))
 print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
 
 
-'''
 # save the classifier
 with open('my_classifier.pkl', 'wb') as fid:
         cPickle.dump(text_clf, fid)
 
+'''
 SVC_values = []
 
 for n in range(100, train_data_length, 200):
@@ -97,3 +97,5 @@ for n in range(100, train_data_length, 200):
     predicted = text_clf.predict(docs_test)
     SVC_values.append(metrics.f1_score(twenty_test.target, predicted, average='weighted'))
 '''
+
+
