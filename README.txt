@@ -1,14 +1,38 @@
-The two lists in project_preproess files are
+CSE 537 Project - Detection of Insults in Social Commentary
 
-1.	The list with 0 and 1 values for the corresponding comments.
+Team Details:
+	Name	- 	Group No 17
+	Members	- 	Hemant Pandey		: 110828730
+				Sayan Bandyopadhyay	: 110946522
+				Snigdha Kamal		: 110920843
+				 
 
-2.	The list of list of all words.
+Main Project Folders/File Descriptions:
+	- ./
+		Contains entire codebase related to project processing, datasets, python files along with other resources
 
-When you'll run the file, they both will get printed, see the results.
+			* Project_preprocess_data.py : File containing which cleans, preprocesses the data. For detailed information, see the project report.
 
-Check if they are fitting without any errors in countVectorizer and it is working.
+			* Train_data.py : Contains the entire training and modelling code.
 
-TO DO:
+			* Visualization.py : Contains the code for the visualisation of graphs and charts.
 
-1.	Since all the stopwords have been removed, we have to allow some words to be there (as discussed).
-	We'll see this later. First we need a basic working model (maybe with low precision but atleast working.)
+			* train : Training data
+
+			* test : Test data
+
+			* train_clean : Preprocessed data from Project_preprocess_data.py
+
+			* test_clean : Preprocessing the test data.
+
+			* Contributors : Members involved in the project
+
+			* full_list_of_bad_words : Google bad words list used.
+
+			* README : The file that you are reading right now
+
+Steps to Run:
+	
+	1.)	Run Project_preprocess_data.py
+
+	2.) 

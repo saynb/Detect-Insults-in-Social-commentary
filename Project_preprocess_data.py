@@ -24,10 +24,10 @@ def clean_dataset(dataframe_dataset):
 # Converting all uppercase letters to lower case
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.lower()
 # Removing \n
-    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('\n', '')
-
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].replace(r'\n', '')
+    print(dataframe_dataset['Comment'])
 # Removing all HTML Tags
-    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('[^\w\s]','')
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('[^\w\s]',' ')
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('http\S+','')
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('www\S+','')
 
@@ -41,10 +41,10 @@ def clean_dataset(dataframe_dataset):
 # Trimming all the white spaces
     #dataframe_dataset["Comment"] = dataframe_dataset["Comment"].map(str.strip)
     dataframe_dataset['Comment'] = pd.core.strings.str_strip(dataframe_dataset['Comment'])
-    print(dataframe_dataset['Comment'])
+
 #Tokenizing all the words in a given sentence
     dataframe_dataset['tokenized_sents'] = dataframe_dataset['Comment'].map(lambda row: nltk.word_tokenize(row))
-
+    
 # A custom stop words list which does not exclude words which have a referral meaning like you, we etc
     cust_list = open("Stop_words_custom_list.txt", 'r')
     cust_list = cust_list.read()
