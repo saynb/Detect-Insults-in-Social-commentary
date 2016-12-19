@@ -92,6 +92,11 @@ dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
 predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
 #print(np.mean(predicted == dataframe_dataset_test["Insult"]))
 #print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+naive_bayes = []
+for n in range(100, len(dataframe_dataset), 200):
+    text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"].head(n),dataframe_dataset["Insult"].head(n))
+    predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+    naive_bayes.append(metrics.f1_score(dataframe_dataset_test["Insult"], predicted, average='weighted'))
 
 
 # LinearSVC
@@ -118,6 +123,12 @@ dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
 predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
 #print(np.mean(predicted == dataframe_dataset_test["Insult"]))
 #print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+linear_svc = []
+for n in range(100, len(dataframe_dataset), 200):
+    text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"].head(n),dataframe_dataset["Insult"].head(n))
+    predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+    linear_svc.append(metrics.f1_score(dataframe_dataset_test["Insult"], predicted, average='weighted'))
+
 
 #Logistic Regresson
 text_clf = Pipeline([
@@ -143,6 +154,11 @@ dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
 predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
 #print(np.mean(predicted == dataframe_dataset_test["Insult"]))
 #print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+log_reg = []
+for n in range(100, len(dataframe_dataset), 200):
+    text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"].head(n),dataframe_dataset["Insult"].head(n))
+    predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+    log_reg.append(metrics.f1_score(dataframe_dataset_test["Insult"], predicted, average='weighted'))
 
 #Random Forest Classifier
 text_clf = Pipeline([
@@ -169,6 +185,11 @@ predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
 #print(np.mean(predicted == dataframe_dataset_test["Insult"]))
 #print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
 
+random_forest = []
+for n in range(100, len(dataframe_dataset), 200):
+    text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"].head(n),dataframe_dataset["Insult"].head(n))
+    predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+    random_forest.append(metrics.f1_score(dataframe_dataset_test["Insult"], predicted, average='weighted'))
  
 #KMeans Clustering
 text_clf = Pipeline([
@@ -194,6 +215,11 @@ dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
 predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
 #print(np.mean(predicted == dataframe_dataset_test["Insult"]))
 #print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+kmeans = []
+for n in range(100, len(dataframe_dataset), 200):
+    text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"].head(n),dataframe_dataset["Insult"].head(n))
+    predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+    kmeans.append(metrics.f1_score(dataframe_dataset_test["Insult"], predicted, average='weighted'))
 
 
 # My_Best_Configuration
@@ -218,36 +244,29 @@ dataframe_dataset_test = pd.read_csv("./Test_clean.csv", na_values='unknown', en
 dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
 
 predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
-#print(np.mean(predicted == dataframe_dataset_test["Insult"]))
-#print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+print(np.mean(predicted == dataframe_dataset_test["Insult"]))
+print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
 
-
-
-SVC_values = []
-
+my_best_conf = []
 for n in range(100, len(dataframe_dataset), 200):
-    text_clf = text_clf.fit(dataframe_dataset[:n]["joined replaced stemmed"],dataframe_dataset[:n]["Insult"])
+    text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"].head(n),dataframe_dataset["Insult"].head(n))
     predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
-    SVC_values.append(metrics.f1_score(datafrane_dataset_test["Insult"], predicted, average='weighted'))
+    my_best_conf.append(metrics.f1_score(dataframe_dataset_test["Insult"], predicted, average='weighted'))
 
 xaxis = [n for n in range(100, len(dataframe_dataset),200)]
-plt.plot(xaxis,SVC_values,'r-', label='Best Configuration')
+plt.plot(xaxis,naive_bayes,'r-', label='naive bayes')
+plt.plot(xaxis,linear_svc,'b-', label='linear SVC')
+plt.plot(xaxis,log_reg,'m-', label='Logistic Regression')
+plt.plot(xaxis,random_forest,'g-', label='random forest')
+plt.plot(xaxis,kmeans,'y-', label='Kmeans')
+plt.plot(xaxis,my_best_conf,'c-', label='Best Configuration')
 plt.xlabel('Training samples')
 plt.ylabel('F1 scores')
+plt.legend(prop={'size':6})
+plt.savefig('trainplot-learning.png')
 plt.show()
-'''
 # save the classifier
-
 with open('my_classifier.pkl', 'wb') as fid:
         cPickle.dump(text_clf, fid)
-
-'''
-SVC_values = []
-
-for n in range(100, train_data_length, 200):
-    text_clf = text_clf.fit(twenty_train.data[:n], twenty_train.target[:n])
-    predicted = text_clf.predict(docs_test)
-    SVC_values.append(metrics.f1_score(twenty_test.target, predicted, average='weighted'))
-'''
 
 
