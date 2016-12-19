@@ -1,10 +1,9 @@
 CSE 537 Project - Detection of Insults in Social Commentary
 
 Team Details:
-	Name	- 	Group No 17
 	Members	- 	Hemant Pandey		: 110828730
 				Sayan Bandyopadhyay	: 110946522
-				Snigdha Kamal		: 110920843
+				Snigdha Kamal		: 110937472
 				 
 
 Main Project Folders/File Descriptions:
@@ -15,7 +14,7 @@ Main Project Folders/File Descriptions:
 
 			* Train_data.py : Contains the entire training and modelling code.
 
-			* Visualization.py : Contains the code for the visualisation of graphs and charts.
+			* Plot.ipynb : Contains the code for the visualisation of graphs and charts.
 
 			* train : Training data
 
@@ -31,8 +30,18 @@ Main Project Folders/File Descriptions:
 
 			* README : The file that you are reading right now
 
+			* .png and .jpg files : Graphs and plots generated dynamically
+
+Pre requisites:
+	1.) Install Jupiter ipython for the functioning of plot.ipynb (This includes graphs for understanding of data)
+
 Steps to Run:
 	
-	1.)	Run Project_preprocess_data.py
+	1.)	Run train_data.py to see the results and the learning curves (This is the main code which trains the data)
+		It will take some time to train all the data based on five models, print the results.
+		At the end, a pkl will will be generated on basis of the best configuration (which is a part of submission)
+		and can be used as a model for future classifications.
 
-	2.) 
+You can clone the git repo at : https://github.com/saynb/AI_proj.git
+Code Repository : https://github.com/saynb/AI_proj
+

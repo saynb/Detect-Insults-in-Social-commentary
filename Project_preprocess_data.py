@@ -1,4 +1,4 @@
-
+# Code to preprocess data
 import sys, math, re
 from operator import itemgetter
 import math
@@ -39,7 +39,6 @@ def clean_dataset(dataframe_dataset):
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('_',' ')
     
 # Trimming all the white spaces
-    #dataframe_dataset["Comment"] = dataframe_dataset["Comment"].map(str.strip)
     dataframe_dataset['Comment'] = pd.core.strings.str_strip(dataframe_dataset['Comment'])
 
 #Tokenizing all the words in a given sentence
@@ -56,17 +55,6 @@ def clean_dataset(dataframe_dataset):
     stemmer = SnowballStemmer('english')
     dataframe_dataset['stemmed'] = dataframe_dataset["tokenized_sents"].apply(lambda x: [stemmer.stem(y) for y in x])
 
-# Separating the list of both insulting and non insulting comments
-    '''for i in dataframe_dataset['Insult']:
-        if dataframe_dataset.iloc[i]['Insult'] == 1:
-
-            insulting_list.append(dataframe_dataset['stemmed'])
-
-    print(insulting_list)'''
-    '''dataframe_dataset_filter = dataframe_dataset.loc[dataframe_dataset['Insult'] == 1]
-    insulting_list = dataframe_dataset_filter['stemmed'].tolist()
-    print(insulting_list)'''
-
 # Replacing shorthand and other internet slangs with correct phrases
     map_words = {"u": "you", "em":"them", "da":"the", "yo":"you",
             "ur":"you", "won't": "will not", "won't": "will not",
@@ -82,15 +70,6 @@ def clean_dataset(dataframe_dataset):
 
     return
 
-
-# Taking google list of bad words
-bw = open('full-list-of-bad-words.txt', 'r')
-
-#inp_text = bw.read()  # raeding file generated from puzzleenerator.py
-#inp_text = re.split('\n|,', inp_text)
-#print(inp_text)
-#print dataframe_dataset.applymap(lambda x: isinstance(x, (int, float))).all(0)
-
 #Reading Train Dataset
 path = r'./train.csv'
 print("Path to dataset is \n" + path)
@@ -99,7 +78,7 @@ clean_dataset(dataframe_dataset)
 dataframe_dataset.to_csv('Train_clean.csv')
 
 #Reading Test Dataset
-path = r'./Test/test_with_solutions.csv'
+path = r'./test_with_solutions.csv'
 print("Path to test dataset is \n" + path)
 dataframe_dataset_test = pd.read_csv(path, na_values='unknown', encoding="utf-8")
 clean_dataset(dataframe_dataset_test)
