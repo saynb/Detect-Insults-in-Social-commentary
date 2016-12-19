@@ -20,10 +20,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 
 def clean_dataset(dataframe_dataset):
 
-# The list for the corresponding 1 and 0 values of the comments
-    dataframe_target = dataframe_dataset[['Insult']]
-    insult_target = dataframe_target.ix[:,0].tolist()
-
+    dataframe_dataset['Backup Comment'] = dataframe_dataset['Comment']
 # Converting all uppercase letters to lower case
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.lower()
 # Removing \n
@@ -35,8 +32,9 @@ def clean_dataset(dataframe_dataset):
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('www\S+','')
 
 # Removing all the non ASCII characters
-    dataframe_dataset['Comment'] = dataframe_dataset["Comment"].apply(lambda x: ''.join([" " if ord(i) < 32 or ord(i) > 126 else i for i in x]))
+    dataframe_dataset['Comment'] = dataframe_dataset["Comment"].map(lambda x: ''.join([" " if ord(i) < 32 or ord(i) > 126 else i for i in x]))
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('xa0',' ')
+    dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('xc2',' ')
 # Removing the _ with ' '
     dataframe_dataset['Comment'] = dataframe_dataset['Comment'].str.replace('_',' ')
     
@@ -45,7 +43,7 @@ def clean_dataset(dataframe_dataset):
     dataframe_dataset['Comment'] = pd.core.strings.str_strip(dataframe_dataset['Comment'])
     print(dataframe_dataset['Comment'])
 #Tokenizing all the words in a given sentence
-    dataframe_dataset['tokenized_sents'] = dataframe_dataset.apply(lambda row: nltk.word_tokenize(row['Comment']), axis=1)
+    dataframe_dataset['tokenized_sents'] = dataframe_dataset['Comment'].map(lambda row: nltk.word_tokenize(row))
 
 # A custom stop words list which does not exclude words which have a referral meaning like you, we etc
     cust_list = open("Stop_words_custom_list.txt", 'r')
@@ -77,6 +75,10 @@ def clean_dataset(dataframe_dataset):
             "'d": "would"}
 
     dataframe_dataset['replaced stemmed'] = dataframe_dataset["stemmed"].map(lambda x: [map_words[x[i]] if x[i] in map_words else x[i] for i in range(len(x)) ])
+
+    dataframe_dataset['joined replaced stemmed'] = \
+            dataframe_dataset["replaced stemmed"]. \
+            map(lambda x: (' '.join(word for word in x)))
 
     return
 
