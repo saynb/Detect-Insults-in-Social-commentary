@@ -17,7 +17,7 @@ from time import time
 # - Line 197 specifies a random forest model with 4 threads (2.5GB RAM per thread is needed). If necessary, reduce the n_jobs param.
 # The RF makes a small improvement, so its commented out and probably not worth the effort.
 
-DIR_PATH = "/Users/prathakrastogi/Documents/SEM 1/AI_proj/Test/" #change the directory path according to your requirement
+DIR_PATH = "F:\SBU_FirstSem\Artificial_Intelligence\Project\AI_proj\Test" #change the directory path according to your requirement
 
 TRAIN_FILE      = DIR_PATH + "train.csv"
 TEST_SOL_FILE   = DIR_PATH + "test_with_solutions.csv"   # This is also used for training, together with TRAIN_FILE
@@ -107,13 +107,13 @@ def ngrams(data, labels, ntrain, mn=1, mx=1, nm=500, binary = False, donorm = Fa
         vectorizer = TfidfVectorizer(max_df=mx,min_df=mn,analyzer=analyzer_type,sublinear_tf=True)
 
     if verbose:
-        print "extracting ngrams... where n is [%d,%d]" % (mn,mx)
+        print("extracting ngrams... where n is [%d,%d]" % (mn,mx))
     
     X_train = vectorizer.fit_transform(ftrain)
     X_test = vectorizer.transform(ftest)
     
     if verbose:
-        print "done in %fs" % (time() - t0), X_train.shape, X_test.shape
+        print("done in %fs" % (time() - t0), X_train.shape, X_test.shape)
 
     y = array(y_train)    
     
@@ -126,7 +126,7 @@ def ngrams(data, labels, ntrain, mn=1, mx=1, nm=500, binary = False, donorm = Fa
         assert sp.issparse(X_train)        
 
     if verbose:
-        print "Extracting best features by a chi-squared test.. ", X_train.shape, X_test.shape    
+        print("Extracting best features by a chi-squared test.. ", X_train.shape, X_test.shape)
     return X_train, y, X_test
 
 # This did not help the score. The goal was to look for interesting long range word pairs. Not useful.

@@ -20,11 +20,18 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk.stem.porter import PorterStemmer
 from sklearn.datasets import load_files
 import numpy as np
+from sklearn.cluster import KMeans
 from sklearn import metrics
 import _pickle as cPickle
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC
 from sklearn.base import TransformerMixin
 import math
+from sklearn.neural_network import MLPClassifier
+from sklearn.neural_network import MLPRegressor
+import matplotlib.pyplot as plt
 
 bw_list = []
 
@@ -60,6 +67,8 @@ text_clf = Pipeline([('vect', CountVectorizer(ngram_range=(2, 2))),
                      ('clf', MultinomialNB()),
                      ])
 '''
+
+# Naive Baye's
 text_clf = Pipeline([
     ('features', FeatureUnion([
         ('ngram_tf_idf', Pipeline([
@@ -73,19 +82,162 @@ text_clf = Pipeline([
 
 text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"],dataframe_dataset["Insult"])
 
-print("Print here the mean value")
-print("Print metric report")
+print("Print here the mean value of Naive Baye's")
+print("Print metric report of Naive Baye's")
 
 # Testing
 dataframe_dataset_test = pd.read_csv("./Test_clean.csv", na_values='unknown', encoding="utf-8")
 dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
 
 predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
-print(np.mean(predicted == dataframe_dataset_test["Insult"]))
-print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+#print(np.mean(predicted == dataframe_dataset_test["Insult"]))
+#print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
 
 
+# LinearSVC
+text_clf = Pipeline([
+    ('features', FeatureUnion([
+        ('ngram_tf_idf', Pipeline([
+            ('counts', CountVectorizer(ngram_range=(2, 2))),
+            ('tf_idf', TfidfTransformer())
+            ])),
+        ('badwords', BadWordTransformer())
+        ])),
+    ('classifier', LinearSVC())
+    ])
+
+text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"],dataframe_dataset["Insult"])
+
+print("Print here the mean value of LinearSVC")
+print("Print metric report of LinearSVC")
+
+# Testing
+dataframe_dataset_test = pd.read_csv("./Test_clean.csv", na_values='unknown', encoding="utf-8")
+dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
+
+predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+#print(np.mean(predicted == dataframe_dataset_test["Insult"]))
+#print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+
+#Logistic Regresson
+text_clf = Pipeline([
+    ('features', FeatureUnion([
+        ('ngram_tf_idf', Pipeline([
+            ('counts', CountVectorizer(ngram_range=(2, 2))),
+            ('tf_idf', TfidfTransformer())
+            ])),
+        ('badwords', BadWordTransformer())
+        ])),
+    ('classifier', LogisticRegression())
+    ])
+
+text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"],dataframe_dataset["Insult"])
+
+print("Print here the mean value of Logistic Regression")
+print("Print metric report of Logistic Regression")
+
+# Testing
+dataframe_dataset_test = pd.read_csv("./Test_clean.csv", na_values='unknown', encoding="utf-8")
+dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
+
+predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+#print(np.mean(predicted == dataframe_dataset_test["Insult"]))
+#print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+
+#Random Forest Classifier
+text_clf = Pipeline([
+    ('features', FeatureUnion([
+        ('ngram_tf_idf', Pipeline([
+            ('counts', CountVectorizer(ngram_range=(2, 2))),
+            ('tf_idf', TfidfTransformer())
+            ])),
+        ('badwords', BadWordTransformer())
+        ])),
+    ('classifier', RandomForestClassifier())
+    ])
+
+text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"],dataframe_dataset["Insult"])
+
+print("Print here the mean value of Random Forest Classifier")
+print("Print metric report of Random Forest Classifier")
+
+# Testing
+dataframe_dataset_test = pd.read_csv("./Test_clean.csv", na_values='unknown', encoding="utf-8")
+dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
+
+predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+#print(np.mean(predicted == dataframe_dataset_test["Insult"]))
+#print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+
+ 
+#KMeans Clustering
+text_clf = Pipeline([
+    ('features', FeatureUnion([
+        ('ngram_tf_idf', Pipeline([
+            ('counts', CountVectorizer(ngram_range=(2, 2))),
+            ('tf_idf', TfidfTransformer())
+            ])),
+        ('badwords', BadWordTransformer())
+        ])),
+    ('classifier', KMeans(n_clusters = 2))
+    ])
+
+text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"],dataframe_dataset["Insult"])
+
+print("Print here the mean value of KMeans Clustering")
+print("Print metric report of KMeans Clustering")
+
+# Testing
+dataframe_dataset_test = pd.read_csv("./Test_clean.csv", na_values='unknown', encoding="utf-8")
+dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
+
+predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+#print(np.mean(predicted == dataframe_dataset_test["Insult"]))
+#print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+
+
+# My_Best_Configuration
+text_clf = Pipeline([
+    ('features', FeatureUnion([
+        ('ngram_tf_idf', Pipeline([
+            ('counts', CountVectorizer(ngram_range=(1, 2))),
+            ('tf_idf', TfidfTransformer())
+            ])),
+        ('badwords', BadWordTransformer())
+        ])),
+    ('classifier', LinearSVC(penalty='l2', loss='squared_hinge',  C=1.0, fit_intercept=True, intercept_scaling=1, max_iter=1000))
+    ])
+
+text_clf = text_clf.fit(dataframe_dataset["joined replaced stemmed"],dataframe_dataset["Insult"])
+
+print("Print here the mean value of Best Configuration")
+print("Print metric report of Best Configuration")
+
+# Testing
+dataframe_dataset_test = pd.read_csv("./Test_clean.csv", na_values='unknown', encoding="utf-8")
+dataframe_dataset_test["joined replaced stemmed"].fillna(" ", inplace=True)
+
+predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+#print(np.mean(predicted == dataframe_dataset_test["Insult"]))
+#print(metrics.classification_report(dataframe_dataset_test["Insult"], predicted, target_names=target_names))
+
+
+
+SVC_values = []
+
+for n in range(100, len(dataframe_dataset), 200):
+    text_clf = text_clf.fit(dataframe_dataset[:n]["joined replaced stemmed"],dataframe_dataset[:n]["Insult"])
+    predicted = text_clf.predict(dataframe_dataset_test["joined replaced stemmed"])
+    SVC_values.append(metrics.f1_score(datafrane_dataset_test["Insult"], predicted, average='weighted'))
+
+xaxis = [n for n in range(100, len(dataframe_dataset),200)]
+plt.plot(xaxis,SVC_values,'r-', label='Best Configuration')
+plt.xlabel('Training samples')
+plt.ylabel('F1 scores')
+plt.show()
+'''
 # save the classifier
+
 with open('my_classifier.pkl', 'wb') as fid:
         cPickle.dump(text_clf, fid)
 
