@@ -41,6 +41,8 @@ Steps to Run:
 		It will take some time to train all the data based on five models, print the results.
 		At the end, a pkl will will be generated on basis of the best configuration (which is a part of submission)
 		and can be used as a model for future classifications.
+	2.)	Run test_script.py to test the model. In caseif you don't want to make any changes to the model, just skip
+		step 1 and run this file. It takes a sentence as an input and tells you whether it is an insult or not.
 
 You can clone the git repo at : https://github.com/saynb/Detect-Insults-in-Social-commentary.git
 Code Repository : https://github.com/saynb/Detect-Insults-in-Social-commentary
