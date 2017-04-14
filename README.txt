@@ -42,6 +42,6 @@ Steps to Run:
 		At the end, a pkl will will be generated on basis of the best configuration (which is a part of submission)
 		and can be used as a model for future classifications.
 
-You can clone the git repo at : https://github.com/saynb/AI_proj.git
-Code Repository : https://github.com/saynb/AI_proj
+You can clone the git repo at : https://github.com/saynb/Detect-Insults-in-Social-commentary.git
+Code Repository : https://github.com/saynb/Detect-Insults-in-Social-commentary
 
